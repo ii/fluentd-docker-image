@@ -7,7 +7,7 @@ services:
 
 build:
   stage: build
-  environment:
+  variables:
     Dockerfile: v0.14/debian
   script:
     - export IMAGE_TAG=$(echo -en $CI_COMMIT_REF_NAME | tr -c '[:alnum:]_.-' '-')
