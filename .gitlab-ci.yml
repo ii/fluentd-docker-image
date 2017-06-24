@@ -9,13 +9,16 @@ build:
   stage: build
   variables:
     Dockerfile: v0.14/debian
+    ImageTag: "${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_JOB_ID}"
+    ImageName: "${CI_REGISTRY_IMAGE}/v0.14/debian"
   script:
     - apk update
     - apk add make
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - make image DOCKERFILE=$Dockerfile VERSION=${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_JOB_ID} || sleep 999999
+    - make image DOCKERFILE=$Dockerfile VERSION=$ImageTag || sleep 999999
+    - docker tag fluentd/fluentd:${ImageTag} 
     - docker images | head -5
-    - echo make test DOCKERFILE=$Dockerfile VERSION=${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_JOB_ID} || sleep 999999
+    - echo make test DOCKERFILE=$Dockerfile VERSION=$ImageTag || sleep 999999
     - sleep 999999
-    - echo docker build --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
-    - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
+    - echo docker build --pull -t "$CI_REGISTRY_IMAGE:$ImageTag" .
+    - docker push "$CI_REGISTRY_IMAGE:$ImageTag"
