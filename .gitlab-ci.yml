@@ -5,7 +5,7 @@ stages:
   - build
 
 variables:
-  FLUENTD_BRANCH: master
+  FLUENTD_BRANCH: ci-master
 
 image: docker:latest
 
