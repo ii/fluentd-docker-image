@@ -17,7 +17,7 @@ build:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
     - make image DOCKERFILE=$Dockerfile VERSION=$ImageTag || sleep 999999
     - docker images | head -5
-    - docker tag fluentd/fluentd:${ImageTag} 
+    - docker tag fluentd/fluentd:${ImageTag} ${ImageName}:${ImageTag}
     - echo make test DOCKERFILE=$Dockerfile VERSION=$ImageTag || sleep 999999
     - sleep 999999
     - echo docker build --pull -t "$CI_REGISTRY_IMAGE:$ImageTag" .
