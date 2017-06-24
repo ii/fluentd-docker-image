@@ -10,7 +10,7 @@ build:
   variables:
     Dockerfile: v0.14/debian
     ImageTag: "v0.14/debian-${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_JOB_ID}"
-    ImageName: "${CI_REGISTRY_IMAGE}
+    ImageName: "${CI_REGISTRY_IMAGE}"
   script:
     - apk update
     - apk add make
