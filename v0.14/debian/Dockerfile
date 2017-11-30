@@ -11,6 +11,9 @@ ENV GOSU_VERSION=1.10
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+ARG FLUENTD_GEM
+
+
 # Do not split this into multiple RUN!
 # Docker creates a layer for every RUN-Statement
 # therefore an 'apt-get purge' has no effect
@@ -29,7 +32,16 @@ RUN apt-get update \
  && echo 'gem: --no-document' >> /etc/gemrc \
  && gem install oj -v 2.18.3 \
  && gem install json -v 2.1.0 \
- && gem install fluentd -v 0.14.25 \
+ # && gem install fluentd -v 0.14.25 \
+
+# Fetch and Unzip Remote GEM
+ && wget -O fluentd.zip $FLUENTD_GEM \
+ && mkdir ./gems \
+ && unzip fluentd.zip -d ./gems \
+ # Install Remote GEM
+ && gem install ./gems/fluentd*.gem \
+ && rm -rf ./gems \
+
  && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
  && wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_$dpkgArch \
  && chmod +x /usr/bin/dumb-init \
